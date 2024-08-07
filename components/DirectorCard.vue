@@ -3,6 +3,7 @@ import {Card, CardContent, CardFooter, CardHeader} from "~/components/ui/card";
 import {Button} from "~/components/ui/button";
 import type {ConsolidatedSystemInfo} from "~/lib/disguise/consolidate";
 import {RefreshCwIcon} from "lucide-vue-next";
+import {settings} from "~/lib/settings";
 
 const {server} = defineProps<{ server: ConsolidatedSystemInfo }>();
 const serverStatus = ref<string>("Offline");
@@ -17,6 +18,8 @@ const serverStatus = ref<string>("Offline");
             {{ server.hostname }} - Director
           </h2>
           <p>{{ server.type }}</p>
+          <code v-if="settings.statsForNerds" class="text-sm">{{server.version?.major}}.{{server.version?.minor}}.{{server.version?.hotfix}}.{{server.version?.revision}}</code>
+
         </div>
         <div class="flex items-center gap-2">
           <span v-if="serverStatus === 'Offline'"

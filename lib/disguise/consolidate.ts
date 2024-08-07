@@ -1,9 +1,5 @@
 import {z} from "zod";
-import {
-    detectSystemsResponseSchema,
-    statusGetSessionResponseSchema,
-    statusListHealthResponseSchema,
-} from "./schema";
+import {detectSystemsResponseSchema, statusGetSessionResponseSchema, statusListHealthResponseSchema,} from "./schema";
 
 type StatusGetSessionResponse = z.infer<typeof statusGetSessionResponseSchema>;
 type DetectSystemsResponse = z.infer<typeof detectSystemsResponseSchema>;
@@ -140,7 +136,7 @@ export function consolidateSystemInfo(
             .parse(healthResponse.status.details)
             .filter((d) => d.uid === system.hostname);
 
-        const x = {
+        return {
             ...system,
             role,
             ...(systemInfo && {
@@ -176,7 +172,6 @@ export function consolidateSystemInfo(
                 details: [...sessionDetails, ...systemDetails, ...healthDetails],
             },
         };
-        return x;
     };
     if (sessionResponse.result.isRunningSolo) {
         const soloSystem = findSoloSystem();

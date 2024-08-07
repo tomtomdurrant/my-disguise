@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {socketState} from "~/lib/ws/socket"
-import {statsForNerds} from "~/lib/statsForNerds";
+import {settings} from "~/lib/settings";
 
 </script>
 
 <template>
-  <div v-if="statsForNerds.stats">
+  <div v-if="settings.statsForNerds">
 
     <div class="flex flex-col items-center justify-center">
       <h2 class="text-2xl font-bold">Connection status</h2>
@@ -13,7 +13,10 @@ import {statsForNerds} from "~/lib/statsForNerds";
         <div>
           <span>Connected:</span>
           <span class="font-bold"
-                :class="{'text-green-500': socketState.connected, 'text-red-500': !socketState.connected}">
+                :class="{
+                  'text-green-500': socketState.connected,
+                  'text-red-500': !socketState.connected
+          }">
         {{ socketState.connected ? 'Yes' : 'No' }}
       </span>
         </div>

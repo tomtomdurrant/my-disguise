@@ -2,9 +2,14 @@
 import {httpData} from '~/lib/ws/socket';
 import {consolidateSystemInfo} from "~/lib/disguise/consolidate";
 
-const consolidateddata = computed(() => consolidateSystemInfo(httpData.session, httpData.systems, httpData.health));
+const consolidated = computed(() => {
+  if (!httpData.session || !httpData.systems || !httpData.health) {
+    return null;
+  }
+  return consolidateSystemInfo(httpData.session, httpData.systems, httpData.health);
+});
 
-console.log(consolidateddata.value)
+console.log(consolidated.value)
 
 </script>
 
@@ -14,12 +19,14 @@ console.log(consolidateddata.value)
       <ConnectionClient/>
       <div class="grid w-full gap-14">
         <section class="grid grid-cols-2">
-          <DirectorCard :server="consolidateddata.director"/>
+          <template v-if="consolidated">
+            <DirectorCard :server="consolidated.director"/>
+            <ServerCard v-for="server in consolidated.understudies" :key="server.uid" :server="server"/>
+          </template>
         </section>
-
       </div>
 
-      <!--  <ActiveTransport/>-->
+      <ActiveTransport/>
       <Annotations/>
       <Systems/>
       <Health/>

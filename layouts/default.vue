@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Switch} from "~/components/ui/switch";
 import {Label} from "~/components/ui/label";
-import {statsForNerds} from "~/lib/statsForNerds";
+import {settings} from "~/lib/settings";
 </script>
 
 <template>
@@ -12,9 +12,13 @@ import {statsForNerds} from "~/lib/statsForNerds";
         <ul class="flex space-x-4">
           <li>
             <div class="flex items-center space-x-2">
-              <Switch @update:checked="(v) =>{
-                statsForNerds.stats = v;
-              } " :checked="statsForNerds.stats" id="stats-for-nerds"/>
+              <Switch v-model:checked="settings.safeMode"/>
+              <Label for="safe-mode">Safe mode</Label>
+            </div>
+          </li>
+          <li>
+            <div class="flex items-center space-x-2">
+              <Switch v-model:checked="settings.statsForNerds" id="stats-for-nerds"/>
               <Label for="stats-for-nerds">Stats for nerds</Label>
             </div>
           </li>
@@ -24,7 +28,7 @@ import {statsForNerds} from "~/lib/statsForNerds";
         </ul>
       </nav>
     </header>
-      <slot/>
+    <slot/>
   </div>
 </template>
 
