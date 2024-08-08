@@ -27,8 +27,8 @@ function getServerProjectInfo(hostname: string) {
 </script>
 
 <template>
-  <div class="max-w-screen-xl py-12 mx-auto grid place-items-center min-h-full">
-    <div class="grid w-full">
+  <div class="w-full">
+    <div class="">
       <!--      <Projects />-->
       <!--      <ConnectionClient />-->
       <div class="grid w-full gap-14">
@@ -44,10 +44,6 @@ function getServerProjectInfo(hostname: string) {
           </template>
         </section>
       </div>
-      <ActiveTransport />
-      <DisguiseControls />
-      <Annotations />
-      <OscDataGrid />
     </div>
   </div>
 </template>

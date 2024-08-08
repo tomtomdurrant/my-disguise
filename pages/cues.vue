@@ -45,7 +45,6 @@ function getServerProjectInfo(hostname: string) {
         </section>
       </div>
       <ActiveTransport />
-      <DisguiseControls />
       <Annotations />
       <OscDataGrid />
     </div>

@@ -1,13 +1,8 @@
 <script setup lang="ts">
-
-import {httpData} from "~/lib/ws/socket";
+import { httpData } from "~/lib/ws/socket";
 </script>
 
 <template>
-  <div>
-    <h1>tracks</h1>
-  </div>
-
   <ClientOnly>
     <div v-if="httpData.tracks != null">
       <pre>{{ JSON.stringify(httpData.tracks, null, 2) }}</pre>

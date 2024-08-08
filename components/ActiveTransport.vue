@@ -1,19 +1,8 @@
 <script setup lang="ts">
 import { httpData, oscData, socket } from "~/lib/ws/socket";
 import { Badge } from "~/components/ui/badge";
+import { Control } from "~/lib/disguise/control";
 import { settings } from "~/lib/settings";
-
-function engageStatus(setEngage: boolean) {
-  console.log(setEngage);
-  if (settings.safeMode) {
-    alert("safe mode is enabled");
-  } else {
-    socket.emit(
-      "/session/transport/engage",
-      setEngage ? "engage" : "disengage",
-    );
-  }
-}
 </script>
 
 <template>
@@ -21,15 +10,14 @@ function engageStatus(setEngage: boolean) {
     <div v-if="httpData.active != null">
       <h3>Currently active transport</h3>
       <p>{{ httpData.active.result[0].name }}</p>
+      <p v-if="settings.statsForNerds">{{ httpData.active.result[0].uid}}</p>
       <template v-if="httpData.active.result[0].engaged">
-        <Badge class="bg-green-500"> Engaged </Badge>
-        <Button variant="destructive" @click="engageStatus(false)">
-          Disengage
-        </Button>
+        <Badge class="bg-green-500"> Engaged</Badge>
+        <Button variant="destructive" @click="Control.disengage()"> Disengage</Button>
       </template>
       <template v-else>
-        <Badge class="bg-red-500"> Disengaged </Badge>
-        <Button variant="default" @click="engageStatus(true)"> Engage </Button>
+        <Badge class="bg-red-500"> Disengaged</Badge>
+        <Button variant="default" @click="Control.engage()"> Engage</Button>
       </template>
     </div>
   </ClientOnly>
