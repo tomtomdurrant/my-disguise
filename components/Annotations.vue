@@ -15,48 +15,63 @@ function getMatchingTag(noteTime: number, index: number) {
   }
   return httpData.annotations[index].result.annotations.tags.find((tag) => tag.time === noteTime);
 }
+function getVariant(noteTime: number, index: number) {
+  const value = getMatchingTag(noteTime, index) ? "default" : "secondary";
+  return value;
+}
 </script>
 
 <template>
   <ClientOnly>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 col-span-4 gap-4 md:grid-cols-2">
       <Card v-for="(annotation, index) in httpData.annotations">
         <CardHeader>
           <div class="flex items-center justify-between">
             <CardTitle>{{ annotation.result.name }}</CardTitle>
 
-            <div class="text-sm font-mono" v-if="settings.statsForNerds">
-              <p>uid:<span>{{ annotation.result.uid }}</span></p>
+            <div class="font-mono text-sm" v-if="settings.statsForNerds">
+              <p>
+                uid:<span>{{ annotation.result.uid }}</span>
+              </p>
               <p>length: {{ getAnnotationTrack(annotation.result.uid)?.length }}</p>
             </div>
           </div>
         </CardHeader>
-        <ScrollArea class="h-72 rounded-md border-2 p-4">
-          <div class="p-4">
-            <h4 class="mb-4 text-sm font-medium leading-none">Marks on the timeline</h4>
-            <template v-for="note in annotation.result.annotations.notes">
-              <div class="flex justify-between">
-                <div class="flex justify-between" v-if="getMatchingTag(note.time, index)">
-                  {{ note.text }}
-                  <p>LX cue {{ getMatchingTag(note.time, index)!.value }}</p>
-                  <Button @click="Control.goToCue(getMatchingTag(note.time, index)!.value)" variant="destructive">
-                    Go to Cue
-                  </Button>
+        <CardContent>
+          <ScrollArea class="h-[300px]">
+            <div class="space-y-4">
+              <div v-for="note in annotation.result.annotations.notes">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p>{{ note.text }}</p>
+                    <p v-if="getMatchingTag(note.time, index)" class="text-sm text-muted-foreground">LX cue {{ getMatchingTag(note.time, index)!.value }}</p>
+                  </div>
+                  <Button size="sm" class="w-24" :variant="getVariant(note.time, index)">{{ getMatchingTag(note.time, index) ? "Go to cue" : "Go to note"}}</Button>
                 </div>
-                <div v-else>
-                  {{ note.text }} -
-                  <Button @click="Control.goToNote(httpData.active?.result[0].uid, note.text)"
-                    >no lx cue associated - go to the note?
-                  </Button>
-                </div>
+                <Separator class="my-2" />
               </div>
-              <Separator class="my-4" />
-            </template>
-          </div>
-        </ScrollArea>
+            </div>
+          </ScrollArea>
+        </CardContent>
       </Card>
     </div>
   </ClientOnly>
 </template>
 
 <style scoped></style>
+<!--<template v-if="getMatchingTag(note.time, index)">-->
+<!--  <div class="">-->
+<!--    <p class="font-medium">{{ note.text }}</p>-->
+<!--    <p>LX cue {{ getMatchingTag(note.time, index)!.value }}</p>-->
+<!--    <Button @click="Control.goToCue(getMatchingTag(note.time, index)!.value)" variant="destructive">-->
+<!--      Go to Cue-->
+<!--    </Button>-->
+<!--  </div>-->
+<!--</template>-->
+<!--<div v-else>-->
+<!--{{ note.text }} - -->
+<!--<Button @click="Control.goToNote(httpData.active?.result[0].uid, note.text)"-->
+<!--&gt;no lx cue associated - go to the note?-->
+<!--</Button>-->
+<!--</div>-->
+<!--</div>-->

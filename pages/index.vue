@@ -26,32 +26,22 @@ function getServerProjectInfo(hostname: string) {
 </script>
 
 <template>
-  <div class="max-w-screen-xl py-12 mx-auto grid place-items-center min-h-full">
-    <div class="grid w-full">
-      <!--      <ConnectionClient />-->
-      <div class="grid w-full gap-14">
-        <section class="grid grid-cols-2">
-          <template v-if="consolidated">
-            <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
-            <ServerCard
-              v-for="server in consolidated.understudies"
-              :key="server.uid"
-              :server="server"
-              :project-info="getServerProjectInfo(server.hostname)"
-            />
-          </template>
-          <template v-else>
-            <!--            <Projects />-->
-          </template>
-        </section>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
-        <ActiveTransport />
-        <DisguiseControls />
-      </div>
-      <Annotations />
-      <OscDataGrid />
+  <div class="grid gap-6 max-w-5xl mx-auto">
+    <!--      <ConnectionClient />-->
+    <div class="grid col-span-4 grid-cols-2 gap-4">
+      <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
+      <ServerCard
+        v-for="server in consolidated.understudies"
+        :key="server.uid"
+        :server="server"
+        :project-info="getServerProjectInfo(server.hostname)"
+      />
     </div>
+    <!--            <Projects />-->
+    <ActiveTransport />
+    <DisguiseControls />
+    <Annotations />
+    <OscDataGrid />
   </div>
 </template>
 
