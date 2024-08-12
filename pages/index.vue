@@ -23,13 +23,11 @@ function getServerProjectInfo(hostname: string) {
   }
   return httpData.projects.result.find((machine) => machine.hostname.toUpperCase() === hostname.toUpperCase());
 }
-
 </script>
 
 <template>
   <div class="max-w-screen-xl py-12 mx-auto grid place-items-center min-h-full">
     <div class="grid w-full">
-      <!--      <Projects />-->
       <!--      <ConnectionClient />-->
       <div class="grid w-full gap-14">
         <section class="grid grid-cols-2">
@@ -42,10 +40,15 @@ function getServerProjectInfo(hostname: string) {
               :project-info="getServerProjectInfo(server.hostname)"
             />
           </template>
+          <template v-else>
+            <!--            <Projects />-->
+          </template>
         </section>
       </div>
-      <ActiveTransport />
-      <DisguiseControls />
+      <div class="grid grid-cols-2 gap-4">
+        <ActiveTransport />
+        <DisguiseControls />
+      </div>
       <Annotations />
       <OscDataGrid />
     </div>

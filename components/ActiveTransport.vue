@@ -7,19 +7,32 @@ import { settings } from "~/lib/settings";
 
 <template>
   <ClientOnly>
-    <div v-if="httpData.active != null">
-      <h3>Currently active transport</h3>
-      <p>{{ httpData.active.result[0].name }}</p>
-      <p v-if="settings.statsForNerds">{{ httpData.active.result[0].uid}}</p>
-      <template v-if="httpData.active.result[0].engaged">
-        <Badge class="bg-green-500"> Engaged</Badge>
-        <Button variant="destructive" @click="Control.disengage()"> Disengage</Button>
-      </template>
-      <template v-else>
-        <Badge class="bg-red-500"> Disengaged</Badge>
-        <Button variant="default" @click="Control.engage()"> Engage</Button>
-      </template>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Engage Status</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div v-if="httpData.active != null">
+          <div class="flex items-center justify-between">
+            <p class="text-lg font-semibold">{{ httpData.active.result[0].name }}</p>
+            <span v-if="settings.statsForNerds" class="font-mono text-sm">uid: {{ httpData.active.result[0].uid }}</span>
+          </div>
+          <p class="text-sm font-medium text-muted-foreground">Current Active Transport</p>
+          <div class="flex items-center space-x-2">
+            <template v-if="httpData.active.result[0].engaged">
+              <Badge class="bg-green-500 p-2"> Engaged</Badge>
+              <Button variant="destructive" @click="Control.disengage(httpData.active.result[0].uid)">
+                Disengage
+              </Button>
+            </template>
+            <template v-else>
+              <Badge class="bg-red-500"> Disengaged</Badge>
+              <Button variant="default" @click="Control.engage(httpData.active.result[0].uid)"> Engage</Button>
+            </template>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   </ClientOnly>
 </template>
 

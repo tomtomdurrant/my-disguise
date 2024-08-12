@@ -19,15 +19,19 @@ function getMatchingTag(noteTime: number, index: number) {
 
 <template>
   <ClientOnly>
-    <div class="grid grid-cols-2 gap-12">
-      <div v-for="(annotation, index) in httpData.annotations">
-        <p>{{ annotation.result.name }}</p>
-        <template v-if="settings.statsForNerds">
-          <p>{{ annotation.result.uid }}</p>
-          <p>{{ getAnnotationTrack(annotation.result.uid)?.length }}</p>
-        </template>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card v-for="(annotation, index) in httpData.annotations">
+        <CardHeader>
+          <div class="flex items-center justify-between">
+            <CardTitle>{{ annotation.result.name }}</CardTitle>
 
-        <ScrollArea class="h-72 rounded-md border-2 p-4 ">
+            <div class="text-sm font-mono" v-if="settings.statsForNerds">
+              <p>uid:<span>{{ annotation.result.uid }}</span></p>
+              <p>length: {{ getAnnotationTrack(annotation.result.uid)?.length }}</p>
+            </div>
+          </div>
+        </CardHeader>
+        <ScrollArea class="h-72 rounded-md border-2 p-4">
           <div class="p-4">
             <h4 class="mb-4 text-sm font-medium leading-none">Marks on the timeline</h4>
             <template v-for="note in annotation.result.annotations.notes">
@@ -40,14 +44,17 @@ function getMatchingTag(noteTime: number, index: number) {
                   </Button>
                 </div>
                 <div v-else>
-                  {{note.text}} - <Button @click="Control.goToNote(httpData.active?.result[0].uid, note.text)">no lx cue associated - go to the note?</Button>
+                  {{ note.text }} -
+                  <Button @click="Control.goToNote(httpData.active?.result[0].uid, note.text)"
+                    >no lx cue associated - go to the note?
+                  </Button>
                 </div>
               </div>
               <Separator class="my-4" />
             </template>
           </div>
         </ScrollArea>
-      </div>
+      </Card>
     </div>
   </ClientOnly>
 </template>

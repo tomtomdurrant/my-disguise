@@ -3,28 +3,19 @@ import { socket } from "~/lib/ws/socket";
 
 export * as Control from "./control";
 
-function engageStatus(setEngage: boolean) {
-  console.log(setEngage);
+export function engage(uid: string) {
   if (settings.safeMode) {
     alert("safe mode is enabled");
   } else {
-    socket.emit("/session/transport/engage", setEngage ? "engage" : "disengage");
+    socket.emit("/session/transport/engage", uid);
   }
 }
 
-export function engage() {
+export function disengage(uid: string) {
   if (settings.safeMode) {
     alert("safe mode is enabled");
   } else {
-    socket.emit("/session/transport/engage", "engage");
-  }
-}
-
-export function disengage() {
-  if (settings.safeMode) {
-    alert("safe mode is enabled");
-  } else {
-    socket.emit("/session/transport/engage", "disengage");
+    socket.emit("/session/transport/disengage", uid);
   }
 }
 
@@ -32,29 +23,6 @@ export function goToCue(cueNumber: string) {
   socket.emit("/d3/showcontrol/cue", cueNumber);
 }
 
-export async function goToNote(trackUid: string, noteText: string) {
-  const res = await fetch("http://192.168.0.18/api/session/transport/gotonote", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      transports: [
-        {
-          transport: {
-            uid: trackUid,
-          },
-          note: noteText,
-          playmode: "Play",
-        },
-      ],
-    }),
-  });
-  console.log(res);
-  const body = await res.json();
-  console.log(body);
-
-}
 
 export function play() {
   socket.emit("/d3/showcontrol/play");
@@ -82,4 +50,12 @@ export function nextSection() {
 
 export function returnToStart() {
   socket.emit("/d3/showcontrol/returntostart");
+}
+
+export function goToNote(trackUid: string, noteText: string) {
+  socket.emit("/d3/showcontrol/gotonote", trackUid, noteText);
+}
+
+export function goToTag() {
+  // socket.emit('/d3/showcontrol/gototag', )
 }
