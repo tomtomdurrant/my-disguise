@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { socketState } from "~/lib/ws/socket";
-import { settings } from "~/lib/settings";
 </script>
 
 <template>
-  <div v-if="settings.statsForNerds">
-    <div class="flex flex-col items-center justify-center text-xs">
+    <div class="flex flex-col items-start md:items-end text-xs">
       <h2 class="font-bold">Connection status</h2>
       <div class="flex items-center space-x-2">
         <div>
@@ -29,6 +27,5 @@ import { settings } from "~/lib/settings";
           <span class="font-bold">{{ socketState.lastMessageTime?.toISOString() }}</span>
         </div>
       </div>
-    </div>
   </div>
 </template>

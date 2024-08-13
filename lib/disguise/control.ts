@@ -1,11 +1,15 @@
 import { settings } from "~/lib/settings";
 import { socket } from "~/lib/ws/socket";
+import { toast } from "~/components/ui/toast";
 
 export * as Control from "./control";
 
 export function engage(uid: string) {
   if (settings.safeMode) {
-    alert("safe mode is enabled");
+    toast({
+      title: "Safe mode is enabled",
+      variant: 'destructive'
+    });
   } else {
     socket.emit("/session/transport/engage", uid);
   }
@@ -13,7 +17,10 @@ export function engage(uid: string) {
 
 export function disengage(uid: string) {
   if (settings.safeMode) {
-    alert("safe mode is enabled");
+    toast({
+      title: "Safe mode is enabled",
+      variant: 'destructive'
+    });
   } else {
     socket.emit("/session/transport/disengage", uid);
   }
@@ -22,7 +29,6 @@ export function disengage(uid: string) {
 export function goToCue(cueNumber: string) {
   socket.emit("/d3/showcontrol/cue", cueNumber);
 }
-
 
 export function play() {
   socket.emit("/d3/showcontrol/play");

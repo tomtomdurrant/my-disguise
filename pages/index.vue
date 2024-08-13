@@ -26,20 +26,18 @@ function getServerProjectInfo(hostname: string) {
 </script>
 
 <template>
-  <div class="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
     <template v-if="!inSession">
       <Projects />
     </template>
     <template v-if="inSession">
-      <div v-if="consolidated" class="grid col-span-4 grid-cols-2 gap-4">
-        <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
-        <ServerCard
-          v-for="server in consolidated.understudies"
-          :key="server.uid"
-          :server="server"
-          :project-info="getServerProjectInfo(server.hostname)"
-        />
-      </div>
+      <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
+      <ServerCard
+        v-for="server in consolidated.understudies"
+        :key="server.uid"
+        :server="server"
+        :project-info="getServerProjectInfo(server.hostname)"
+      />
     </template>
     <ActiveTransport />
     <DisguiseControls />

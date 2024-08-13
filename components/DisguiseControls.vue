@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { Control } from "~/lib/disguise/control";
-import { Play, RefreshCw, StopCircle, SkipBack, SkipForward, CirclePause, ChevronFirst  } from "lucide-vue-next";
+import {
+  Play,
+  RefreshCw,
+  StopCircle,
+  SkipBack,
+  SkipForward,
+  CirclePause,
+  ChevronFirst,
+  ListVideo,
+} from "lucide-vue-next";
 
 const playHeadControls = [
   {
@@ -9,35 +18,34 @@ const playHeadControls = [
     icon: Play,
   },
   {
-    name: "PlaySection",
+    name: "Play Section",
     function: Control.playSection,
-    icon: CirclePause
+    icon: ListVideo,
   },
   {
     name: "Loop Section",
     function: Control.loopSection,
-    icon: RefreshCw
+    icon: RefreshCw,
   },
   {
     name: "Stop",
     function: Control.stop,
-    icon: StopCircle
+    icon: StopCircle,
   },
   {
-    name: "Previous Section",
+    name: "Previous",
     function: Control.previousSection,
-    icon: SkipBack
-
+    icon: SkipBack,
   },
   {
-    name: "Next Section",
+    name: "Next",
     function: Control.nextSection,
-    icon: SkipForward
+    icon: SkipForward,
   },
   {
     name: "Return to start",
     function: Control.returnToStart,
-    icon: ChevronFirst
+    icon: ChevronFirst,
   },
 ];
 </script>
@@ -48,10 +56,16 @@ const playHeadControls = [
       <CardTitle>Disguise Controls</CardTitle>
     </CardHeader>
     <CardContent>
-      <div class="grid grid-cols-2 gap-4">
-        <Button variant="outline" v-for="control in playHeadControls" :key="control.name" @click="control.function" class="flex justify-between ">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <Button
+          variant="outline"
+          v-for="control in playHeadControls"
+          :key="control.name"
+          @click="control.function"
+          class="flex justify-between"
+        >
+          <component :is="control.icon" class="size-5 mr-2" />
           {{ control.name }}
-          <component :is="control.icon" class="size-5 ml-2" />
         </Button>
       </div>
     </CardContent>

@@ -1,5 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import type { ClientToServerEvents, HttpData, OscData, ServerToClientEvents, SocketStateType } from "~/lib/ws/types";
+import { toast } from "~/components/ui/toast";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3000");
 
@@ -124,3 +125,12 @@ socket.on("osc_trackname", (trackName) => {
 socket.on("osc_currentsectionname", (currentSectionName) => {
   oscData.osc_currentsectionname = currentSectionName;
 });
+
+socket.on('error', (error)=>{
+  toast({
+    title: 'Error',
+    description: error,
+    variant: "destructive"
+
+  })
+})
