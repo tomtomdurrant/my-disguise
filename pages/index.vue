@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { httpData } from "~/lib/ws/socket";
+import { httpData, inSession } from "~/lib/ws/socket";
 import { consolidateSystemInfo } from "~/lib/disguise/consolidate";
 
 const consolidated = computed(() => {
@@ -26,18 +26,21 @@ function getServerProjectInfo(hostname: string) {
 </script>
 
 <template>
-  <div class="grid gap-6 max-w-5xl mx-auto">
-    <!--      <ConnectionClient />-->
-    <div class="grid col-span-4 grid-cols-2 gap-4">
-      <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
-      <ServerCard
-        v-for="server in consolidated.understudies"
-        :key="server.uid"
-        :server="server"
-        :project-info="getServerProjectInfo(server.hostname)"
-      />
-    </div>
-    <!--            <Projects />-->
+  <div class="grid grid-cols-4 gap-6 max-w-5xl mx-auto">
+    <template v-if="!inSession">
+      <Projects />
+    </template>
+    <template v-if="inSession">
+      <div v-if="consolidated" class="grid col-span-4 grid-cols-2 gap-4">
+        <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
+        <ServerCard
+          v-for="server in consolidated.understudies"
+          :key="server.uid"
+          :server="server"
+          :project-info="getServerProjectInfo(server.hostname)"
+        />
+      </div>
+    </template>
     <ActiveTransport />
     <DisguiseControls />
     <Annotations />

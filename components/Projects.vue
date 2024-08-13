@@ -30,14 +30,14 @@ const projects = computed(() => {
     return null;
   }
   return httpData.projects.result[0].projects.map((project) => convertPath(project.path));
-})
+});
 
 const onSubmit = handleSubmit(async (values) => {
   const res = await fetch("http://192.168.0.18/api/service/project/startlocalproject", {
     method: "POST",
     body: JSON.stringify({
       projectPath: values.project,
-      soloMode: true,
+      soloMode: false,
       allowUpgrade: true,
     }),
   });
@@ -60,30 +60,37 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-    <form class="w-2/3 space-y-6" @submit="onSubmit">
-      <FormField v-slot="{ componentField }" name="project">
-        <FormItem>
-          <FormLabel>Project</FormLabel>
+  <ClientOnly>
+    <Card class="col-span-2">
+      <CardHeader>
+        <CardTitle> Load Project</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form class="w-2/3 space-y-6" @submit="onSubmit">
+          <FormField v-slot="{ componentField }" name="project">
+            <FormItem>
+              <Select v-bind="componentField">
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a project to load" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem v-for="project in projects" :value="project">
+                      {{ project }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FormDescription> Select a project to load</FormDescription>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-          <Select v-bind="componentField">
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="Select a project to load" />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem v-for="project in projects" :value="project">
-                  {{ project }}
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <FormDescription> Select a project to load</FormDescription>
-          <FormMessage />
-        </FormItem>
-      </FormField>
-
-      <Button type="submit"> Submit</Button>
-    </form>
+          <Button type="submit"> Submit</Button>
+        </form>
+      </CardContent>
+    </Card>
+  </ClientOnly>
 </template>

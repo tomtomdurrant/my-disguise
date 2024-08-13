@@ -43,7 +43,7 @@ const playHeadControls = [
 </script>
 
 <template>
-  <Card>
+  <Card class="col-span-2">
     <CardHeader>
       <CardTitle>Disguise Controls</CardTitle>
     </CardHeader>

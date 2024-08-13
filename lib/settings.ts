@@ -3,9 +3,3 @@ export const settings = reactive({
   safeMode: true,
 });
 
-watch(settings, (v) => {
-  console.log(v);
-  // if (v.stats) {
-  //     alert('You are using this. Therefore you are a nerd.')
-  // }
-});

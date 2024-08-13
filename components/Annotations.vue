@@ -5,6 +5,7 @@ import { Separator } from "~/components/ui/separator";
 import { settings } from "~/lib/settings";
 import { Control } from "~/lib/disguise/control";
 
+
 function getAnnotationTrack(uid: string) {
   return httpData.tracks?.result.find((x) => x.uid === uid);
 }
@@ -15,9 +16,9 @@ function getMatchingTag(noteTime: number, index: number) {
   }
   return httpData.annotations[index].result.annotations.tags.find((tag) => tag.time === noteTime);
 }
+
 function getVariant(noteTime: number, index: number) {
-  const value = getMatchingTag(noteTime, index) ? "default" : "secondary";
-  return value;
+  return getMatchingTag(noteTime, index) ? "default" : "secondary";
 }
 </script>
 
@@ -44,9 +45,23 @@ function getVariant(noteTime: number, index: number) {
                 <div class="flex items-center justify-between">
                   <div>
                     <p>{{ note.text }}</p>
-                    <p v-if="getMatchingTag(note.time, index)" class="text-sm text-muted-foreground">LX cue {{ getMatchingTag(note.time, index)!.value }}</p>
+                    <p v-if="getMatchingTag(note.time, index)" class="text-sm text-muted-foreground">
+                      LX cue {{ getMatchingTag(note.time, index)!.value }}
+                    </p>
                   </div>
-                  <Button size="sm" class="w-24" :variant="getVariant(note.time, index)">{{ getMatchingTag(note.time, index) ? "Go to cue" : "Go to note"}}</Button>
+                  <Button
+                    size="sm"
+                    class="w-24"
+                    :variant="getVariant(note.time, index)"
+                    @click="
+                      () => {
+                        getMatchingTag(note.time, index)
+                          ? Control.goToCue(getMatchingTag(note.time, index)!.value)
+                          : Control.goToNote(httpData.active?.result[0].uid, note.text);
+                      }
+                    "
+                    >{{ getMatchingTag(note.time, index) ? "Go to cue" : "Go to note" }}
+                  </Button>
                 </div>
                 <Separator class="my-2" />
               </div>

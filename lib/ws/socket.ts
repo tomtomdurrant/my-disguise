@@ -8,6 +8,7 @@ export const socketState: SocketStateType = reactive({
   transport: socket.io.engine.transport.name,
   lastMessageTime: null,
 });
+export const inSession = ref(false);
 
 export const httpData: HttpData = reactive({
   active: null,
@@ -28,6 +29,13 @@ export const oscData: OscData = reactive({
   osc_trackname: null,
   osc_currentsectionname: null,
   osc_brightness: null,
+});
+export const section: {
+  current: string | null;
+  next: string | null;
+} = reactive({
+  current: null,
+  next: null,
 });
 
 socket.onAny(() => {
@@ -51,10 +59,13 @@ socket.io.engine.on("upgrade", (rawTransport) => {
 
 socket.on("active", (value) => {
   httpData.active = value;
+  inSession.value = true;
 });
 
 socket.on("annotations", (annotations) => {
   httpData.annotations = annotations;
+
+  inSession.value = true;
 });
 
 socket.on("time", (value) => {
@@ -67,13 +78,16 @@ socket.on("systems", (systems) => {
 
 socket.on("session", (session) => {
   httpData.session = session;
+  inSession.value = true;
 });
 
 socket.on("health", (health) => {
   httpData.health = health;
+  inSession.value = true;
 });
 socket.on("tracks", (tracks) => {
   httpData.tracks = tracks;
+  inSession.value = true;
 });
 socket.on("projects", (projects) => {
   httpData.projects = projects;
@@ -92,6 +106,11 @@ socket.on("osc_timecodeposition", (timecodePosition) => {
 });
 socket.on("osc_sectionhint", (sectionHint) => {
   oscData.osc_sectionhint = sectionHint;
+  const items = sectionHint.split("    ");
+  const currentSection = items[1];
+  const nextSection = items[2];
+  section.current = currentSection;
+  section.next = nextSection;
 });
 
 socket.on("osc_heartbeat", (heartbeat) => {
