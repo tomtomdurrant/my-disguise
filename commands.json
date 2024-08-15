@@ -1,6 +1,38 @@
 [
   {
+    "id": "1",
     "address": "/hello/name",
-    "args": "adrien, tom"
+    "args": [
+      {
+        "type": "string",
+        "value": "tom"
+      },
+      {
+        "type": "integer",
+        "value": 27
+      }
+    ]
+  },
+  {
+    "address": "/hello",
+    "args": [
+      {
+        "type": "string",
+        "value": "world"
+      }
+    ]
+  },
+  {
+    "address": "/by",
+    "args": [
+      {
+        "type": "string",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "address": "/hello",
+    "args": "[{\"type\":\"string\",\"value\":\"1\"}]"
   }
 ]
