@@ -11,3 +11,4 @@ export function getMachineName(ipAddress: string | null) {
   }
   return machineName;
 }
+

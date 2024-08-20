@@ -3,6 +3,8 @@ import { sql } from "drizzle-orm";
 
 export const oscCommands = sqliteTable("oscCommands", {
   id: integer("id").primaryKey(),
+  title: text("title"),
+  notes: text("description"),
   targetIp: text("targetIp"),
   targetPort: integer("targetPort"),
   targetMachineName: text("targetMachineName"),

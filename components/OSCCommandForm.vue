@@ -13,23 +13,24 @@ import { settings } from "~/lib/settings";
 const formSchema = toTypedSchema(
   z.object({
     address: z.string(),
-    // args: z.preprocess((value) => {
-    //   console.log({value});
-    //   return value.split(",");
-    // }),
     args: z.preprocess((value) => {
       if (!value) {
         return [];
       }
-      // if (typeof value !== "string") {
-      //   throw new Error("wtf");
-      // }
-      return value.split(",");
+      if (typeof value !== "string") {
+        throw new Error("I don't know what you've done but somehow this input isn't a string. Refresh maybe?");
+      }
+      if (value.startsWith(" ")) {
+        throw new Error("Starts with a space");
+      }
+      return value.split(",").map((arg) => arg.trim());
     }, z.array(z.string())),
-    targetIp: z.string().ip(),
+    targetIp: z.string().optional(),
     targetPort: z.number({
       coerce: true,
     }),
+    title: z.string(),
+    notes: z.string().optional(),
     // targetMachineName: z.string(),
   })
 );
@@ -57,6 +58,26 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <form class="w-2/3" @submit="onSubmit">
     <div class="grid grid-cols-2 gap-4 py-6">
+      <FormField v-slot="{ componentField }" name="title">
+        <FormItem>
+          <FormLabel>The name of this command</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Send failover request" v-bind="componentField" />
+          </FormControl>
+          <FormDescription></FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="notes">
+        <FormItem>
+          <FormLabel>Any info about the command</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Some notes about the command" v-bind="componentField" />
+          </FormControl>
+          <FormDescription></FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
       <FormField v-slot="{ componentField }" name="address">
         <FormItem>
           <FormLabel>OSC Address</FormLabel>
@@ -71,7 +92,7 @@ const onSubmit = handleSubmit((values) => {
         <FormItem>
           <FormLabel>Arguments</FormLabel>
           <FormControl>
-            <Input type="text" placeholder="" v-bind="componentField" />
+            <Input type="text" placeholder="123,hello" v-bind="componentField" />
           </FormControl>
           <FormDescription> Comma seperated list of arguments</FormDescription>
           <FormMessage />

@@ -8,5 +8,6 @@ export default defineEventHandler(async (event) => {
     throw new Error("No id provided");
   }
   console.log("deleting id", id);
-  await db.delete(oscCommands).where(eq(oscCommands.id, id));
+  const res = await db.delete(oscCommands).where(eq(oscCommands.id, id));
+  console.log(res);
 });

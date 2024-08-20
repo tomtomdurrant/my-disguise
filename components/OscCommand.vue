@@ -2,7 +2,6 @@
 import { Button } from "~/components/ui/button";
 import type { SingleOscCommand } from "~/db/schema";
 import { ArrowUpDown } from "lucide-vue-next";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import {
   AlertDialog,
   AlertDialogHeader,
@@ -14,15 +13,18 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "~/components/ui/alert-dialog";
-import { getMachineName } from "../lib/osc";
+import { getMachineName } from "~/lib/osc";
 
-const { command, sendCommand } = defineProps({
+const { command } = defineProps({
   command: {
     type: Object as () => SingleOscCommand,
     required: true,
   },
-  sendCommand: Function,
 });
+
+const emit = defineEmits<{
+  (e: "sendCommand", command: SingleOscCommand): void;
+}>();
 
 const open = ref(false);
 
@@ -65,8 +67,7 @@ async function remove() {
     <Collapsible v-model:open="open" class="flex flex-col justify-between">
       <div class="flex w-full justify-between">
         <div class="flex items-center">
-          {{ command.address }}
-          <span class="font-thin" v-for="arg in command.args">({{ arg.value }}/{{ getType(arg) }}) {{ " " }}</span>
+          <h3 class="block mr-2">{{ command.title }}</h3>
           <CollapsibleTrigger>
             <Button variant="ghost" size="sm" class="w-9 p-0">
               <ArrowUpDown class="h-4 w-4" />
@@ -113,22 +114,30 @@ async function remove() {
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will delete the command entirely.
-                </AlertDialogDescription>
+                <AlertDialogDescription> This will delete the command entirely.</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction @click="remove">Continue </AlertDialogAction>
+                <AlertDialogAction @click="remove">Continue</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Button @click="sendCommand(command)">Send</Button>
+          <Button @click="emit('sendCommand', command)">Send</Button>
         </div>
       </div>
       <CollapsibleContent>
         <Separator class="my-6" />
-        <div class="grid w-64 grid-cols-2 gap-4">
+        <div class="grid w-full grid-cols-2 lg:grid-cols-4 gap-4">
+          <!--          <p>-->
+          <!--            Address: {{ command.address }}-->
+          <!--            <span class="font-thin" v-for="arg in command.args">({{ arg.value }}/{{ getType(arg) }}) {{ " " }}</span>-->
+          <!--          </p>-->
+          <div class="font-bold">Address</div>
+          <div class="text-right">{{ command.address }}</div>
+          <div class="font-bold">Args</div>
+          <div class="text-right">
+            <template v-for="arg in command.args">{{ arg.value }}/{{ getType(arg) }} {{ " " }}</template>
+          </div>
           <div class="font-bold">Machine Name</div>
           <div class="text-right">{{ getMachineName(command.targetIp) }}</div>
           <div class="font-bold">Target IP</div>
