@@ -64,7 +64,7 @@ async function remove() {
 
 <template>
   <div class="grid">
-    <Collapsible v-model:open="open" class="flex flex-col justify-between">
+    <Collapsible v-model:open="open" class="flex flex-col justify-between dark:bg-secondary">
       <div class="flex w-full justify-between">
         <div class="flex items-center">
           <h3 class="block mr-2">{{ command.title }}</h3>

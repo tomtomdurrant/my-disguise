@@ -3,3 +3,4 @@ export const settings = reactive({
   safeMode: true,
   devtools: false,
 });
+

@@ -26,7 +26,7 @@ const { handleSubmit } = useForm({
   validationSchema: formSchema,
 });
 const projects = computed(() => {
-  if (!httpData.projects) {
+  if (!httpData.projects || httpData.projects.result[0].projects.length === 0) {
     return null;
   }
   return httpData.projects.result[0].projects.map((project) => convertPath(project.path));
@@ -61,12 +61,12 @@ const onSubmit = handleSubmit(async (values) => {
 
 <template>
   <ClientOnly>
-    <Card class="col-span-2">
+    <Card class="col-span-2 ">
       <CardHeader>
         <CardTitle> Load Project</CardTitle>
       </CardHeader>
       <CardContent>
-        <form class="w-2/3 space-y-6" @submit="onSubmit">
+        <form v-if="projects && projects.length > 0" class="w-2/3 space-y-6" @submit="onSubmit">
           <FormField v-slot="{ componentField }" name="project">
             <FormItem>
               <Select v-bind="componentField">
@@ -90,6 +90,7 @@ const onSubmit = handleSubmit(async (values) => {
 
           <Button type="submit"> Submit</Button>
         </form>
+        <p v-else class="text-gray-500">No projects available. Please create a project first.</p>
       </CardContent>
     </Card>
   </ClientOnly>

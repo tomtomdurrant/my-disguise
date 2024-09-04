@@ -62,14 +62,12 @@ const playHeadControls = [
           v-for="control in playHeadControls"
           :key="control.name"
           @click="control.function"
-          class="flex justify-between"
+          class="flex items-center justify-between"
         >
-          <component :is="control.icon" class="size-5 mr-2" />
-          {{ control.name }}
+          <component :is="control.icon" class="w-5 h-5 flex-shrink-0 mr-2" />
+          <span class="text-sm">{{ control.name }}</span>
         </Button>
       </div>
     </CardContent>
   </Card>
 </template>
-
-<style scoped></style>

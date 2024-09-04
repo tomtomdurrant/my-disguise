@@ -7,7 +7,13 @@ export default defineNuxtConfig({
     port: 8000,
   },
 
-  modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/color-mode", "shadcn-nuxt",],
+  colorMode: {
+    classSuffix: '',
+    preference: 'system', // You can set this to 'dark' or 'light' if you prefer
+    fallback: 'light',
+    dataValue: 'theme',
+  },
   shadcn: {
     /**
      * Prefix for all the imported component

@@ -28,17 +28,14 @@ watch(commands, (newCommands) => {
 });
 
 async function addCommand(command: InsertOscCommand) {
-  console.log(command);
-  const res = await $fetch("/api/osc", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command),
-    onResponse: async () => {
-      await refreshNuxtData("commands");
-    },
-  });
+    const res = await $fetch("/api/osc", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(command),
+    });
+    await refreshNuxtData("commands");
 }
 </script>
 
@@ -49,7 +46,7 @@ async function addCommand(command: InsertOscCommand) {
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">Created Commands</h2>
       <ul class="gap-6 grid grid-cols-1 md:grid-cols-2">
-        <li v-for="(command, index) in commands" :key="index" class="bg-gray-100 h-fit p-4 rounded">
+        <li v-for="(command, index) in commands" :key="index" class="bg-gray-100 h-fit p-4 rounded dark:bg-secondary">
           <SingleCommand :command="command" @send-command="sendCommand" :ke="command.id" />
         </li>
       </ul>

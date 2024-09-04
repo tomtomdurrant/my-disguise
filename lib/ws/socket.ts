@@ -1,8 +1,12 @@
 import { io, Socket } from "socket.io-client";
 import type { ClientToServerEvents, HttpData, OscData, ServerToClientEvents, SocketStateType } from "~/lib/ws/types";
 import { toast } from "~/components/ui/toast";
+import { addError } from "~/lib/errorStore";
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3000");
+socket.on("connect_error", (error) => {
+  addError({ message: error.message, name: error.name, stack: error.stack,  });
+});
 
 export const socketState: SocketStateType = reactive({
   connected: false,
@@ -126,11 +130,10 @@ socket.on("osc_currentsectionname", (currentSectionName) => {
   oscData.osc_currentsectionname = currentSectionName;
 });
 
-socket.on('error', (error)=>{
+socket.on("error", (error) => {
   toast({
-    title: 'Error',
+    title: "Error",
     description: error,
-    variant: "destructive"
-
-  })
-})
+    variant: "destructive",
+  });
+});

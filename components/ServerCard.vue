@@ -8,7 +8,7 @@ import { Button } from "~/components/ui/button";
 
 const { server, projectInfo } = defineProps<{
   server: ConsolidatedSystemInfo;
-  projectInfo: ListProjectsResponse["result"][number];
+  projectInfo?: ListProjectsResponse["result"][number];
 }>();
 const isOpen = ref(false);
 </script>
