@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { httpData } from "~/lib/ws/socket";
+// import { httpData } from "~/lib/ws/socket";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { settings } from "~/lib/settings";
-import { Control } from "~/lib/disguise/control";
+
+import { useDataStore } from "~/stores/dataStore";
+
+const dataStore = useDataStore();
+const { httpData } = dataStore;
 
 function getAnnotationTrack(uid: string) {
   return httpData.tracks?.result.find((x) => x.uid === uid);
@@ -53,9 +57,9 @@ function getVariant(noteTime: number, index: number) {
                     :variant="getVariant(note.time, index)"
                     @click="
                       () => {
-                        getMatchingTag(note.time, index)
-                          ? Control.goToCue(getMatchingTag(note.time, index)!.value)
-                          : Control.goToNote(httpData.active?.result[0].uid, note.text);
+                        // getMatchingTag(note.time, index)
+                        //   ? Control.goToCue(getMatchingTag(note.time, index)!.value)
+                        //   : Control.goToNote(httpData.active?.result[0].uid, note.text);
                       }
                     "
                     >{{ getMatchingTag(note.time, index) ? "Go to cue" : "Go to note" }}

@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/toast";
-import { httpData } from "~/lib/ws/socket";
+import {useDataStore} from "~/stores/dataStore";
+const { httpData } = useDataStore();
 
 function convertPath(path: string) {
   return path.replace(/\\/g, "/").split("/d3 projects/")[1];

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { socket } from "~/lib/ws/socket";
+const {$socket} = useNuxtApp();
 </script>
 
 <template>
   <Button
     @click="
       () => {
-        socket.emit('error', 'this is an error message');
+        $socket.emit('error', 'this is an error message');
       }
     "
   >Send an error</Button>

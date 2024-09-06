@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Control } from "~/lib/disguise/control";
 import {
   Play,
   RefreshCw,
@@ -10,41 +9,42 @@ import {
   ChevronFirst,
   ListVideo,
 } from "lucide-vue-next";
+const controlRef = useControl();
 
 const playHeadControls = [
   {
     name: "Play",
-    function: Control.play,
+    function: controlRef.play,
     icon: Play,
   },
   {
     name: "Play Section",
-    function: Control.playSection,
+    function: controlRef.playSection,
     icon: ListVideo,
   },
   {
     name: "Loop Section",
-    function: Control.loopSection,
+    function: controlRef.loopSection,
     icon: RefreshCw,
   },
   {
     name: "Stop",
-    function: Control.stop,
+    function: controlRef.stop,
     icon: StopCircle,
   },
   {
     name: "Previous",
-    function: Control.previousSection,
+    function: controlRef.previousSection,
     icon: SkipBack,
   },
   {
     name: "Next",
-    function: Control.nextSection,
+    function: controlRef.nextSection,
     icon: SkipForward,
   },
   {
     name: "Return to start",
-    function: Control.returnToStart,
+    function: controlRef.returnToStart,
     icon: ChevronFirst,
   },
 ];

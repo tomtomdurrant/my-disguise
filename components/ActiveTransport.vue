@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { httpData, oscData, socket } from "~/lib/ws/socket";
 import { Badge } from "~/components/ui/badge";
-import { Control } from "~/lib/disguise/control";
 import { settings } from "~/lib/settings";
+import { useDataStore } from "~/stores/dataStore";
+import {useControl} from "~/composables/useControl";
+
+const dataStore = useDataStore();
+const control = useControl();
+const { httpData } = dataStore;
 </script>
 
 <template>
@@ -25,32 +29,27 @@ import { settings } from "~/lib/settings";
               <p class="bg-green-800 py-2 px-4 rounded-md text-green-200 underline underline-offset-2 font-semibold">
                 Engaged
               </p>
-              <Button variant="destructive" @click="Control.disengage(httpData.active.result[0].uid)">
+              <Button variant="destructive" @click="control.disengage(httpData.active.result[0].uid)">
                 Disengage
               </Button>
             </template>
             <template v-else>
-              <p class="bg-red-700 py-2 px-4 rounded-md text-red-200 underline underline-offset-2 font-semibold animate-pulse">
+              <p
+                class="bg-red-700 py-2 px-4 rounded-md text-red-200 underline underline-offset-2 font-semibold animate-pulse"
+              >
                 Disengaged
               </p>
-              <Button variant="secondary" @click="Control.engage(httpData.active.result[0].uid)">
-                Engage
-              </Button>
+              <Button variant="secondary" @click="control.engage(httpData.active.result[0].uid)"> Engage</Button>
             </template>
           </div>
         </div>
         <div v-else-if="settings.statsForNerds" class="text-sm text-muted-foreground space-y-2">
           <p>No active transport data available.</p>
-          <p v-if="httpData.active?.error" class="text-red-500">
-            Error: {{ httpData.active.error }}
-          </p>
+<!--          <p v-if="httpData.active?.error" class="text-red-500">Error: {{ httpData.active.error }}</p>-->
         </div>
-        <div v-else class="text-sm text-muted-foreground">
-          Engage status not available.
-        </div>
+        <div v-else class="text-sm text-muted-foreground">Engage status not available.</div>
       </CardContent>
     </Card>
   </ClientOnly>
 </template>
 
-<style scoped></style>

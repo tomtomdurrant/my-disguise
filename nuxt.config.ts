@@ -1,18 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   devServer: {
     port: 8000,
   },
+  plugins: ["~/plugins/socket.client.ts"],
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/color-mode", "shadcn-nuxt",],
+  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@nuxtjs/color-mode", "shadcn-nuxt"],
   colorMode: {
-    classSuffix: '',
-    preference: 'system', // You can set this to 'dark' or 'light' if you prefer
-    fallback: 'light',
-    dataValue: 'theme',
+    classSuffix: "",
+    preference: "system", // You can set this to 'dark' or 'light' if you prefer
+    fallback: "light",
+    dataValue: "theme",
   },
   shadcn: {
     /**

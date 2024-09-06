@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { oscData, section } from "~/lib/ws/socket";
 import { settings } from "~/lib/settings";
+import { useDataStore } from "~/stores/dataStore";
+
+const {oscData, section} = useDataStore();
+
 
 const data = computed(() => {
-  // make a title for each one
-  // make a value for each one
   return [
     {
       title: "Current Section",

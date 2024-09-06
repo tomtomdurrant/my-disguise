@@ -1,28 +1,32 @@
 <script setup lang="ts">
-import { httpData, inSession, socket } from "~/lib/ws/socket";
+// import { httpData, inSession, socket } from "~/lib/ws/socket";
+import { useDataStore } from "~/stores/dataStore";
 import { consolidateSystemInfo } from "~/lib/disguise/consolidate";
 
+const dataStore = useDataStore();
+
 const consolidated = computed(() => {
-  if (!httpData.session || !httpData.systems || !httpData.health) {
+  if (!dataStore.httpData.session || !dataStore.httpData.systems || !dataStore.httpData.health) {
     return null;
   }
-  return consolidateSystemInfo(httpData.session, httpData.systems, httpData.health);
+  const x = consolidateSystemInfo(dataStore.httpData.session, dataStore.httpData.systems, dataStore.httpData.health);
+  return x;
 });
 
 const directorProjects = computed(() => {
-  if (!httpData.projects?.result || !consolidated.value?.director?.hostname) {
+  if (!dataStore.httpData.projects?.result || !consolidated?.value?.director.hostname) {
     return undefined;
   }
-  return httpData.projects.result.find(
+  return dataStore.httpData.projects.result.find(
     (machine) => machine.hostname.toUpperCase() === consolidated?.value?.director.hostname.toUpperCase()
   );
 });
 
-function getServerProjectInfo(hostname: string): typeof httpData.projects.result[number] | undefined {
-  if (!httpData.projects?.result || !hostname) {
+function getServerProjectInfo(hostname: string): (typeof httpData.projects.result)[number] | undefined {
+  if (!dataStore.httpData.projects?.result || !hostname) {
     return undefined;
   }
-  return httpData.projects.result.find((machine) => machine.hostname.toUpperCase() === hostname.toUpperCase());
+  return dataStore.httpData.projects.result.find((machine) => machine.hostname.toUpperCase() === hostname.toUpperCase());
 }
 </script>
 
@@ -31,15 +35,19 @@ function getServerProjectInfo(hostname: string): typeof httpData.projects.result
     <!-- <Button @click="() =>{
       socket.emit('/project')
     }">Click</Button> -->
-    <template v-if="!inSession">
+    <template v-if="!dataStore.inSession">
       <Projects />
     </template>
-    <template v-else-if="inSession && consolidated?.director">
+    <template v-else-if="dataStore.inSession && consolidated?.director">
       <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
-      <ServerCard v-for="server in consolidated.understudies" :key="server.uid" :server="server"
-        :project-info="getServerProjectInfo(server.hostname)" />
+      <ServerCard
+        v-for="server in consolidated.understudies"
+        :key="server.uid"
+        :server="server"
+        :project-info="getServerProjectInfo(server.hostname)"
+      />
     </template>
-    <template v-else-if="inSession && !consolidated?.director">
+    <template v-else-if="dataStore.inSession && !consolidated?.director">
       <div class="col-span-full bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
         <p class="font-bold">No Director Available</p>
         <p>There is currently no director system connected. Please check your network connection or system status.</p>
@@ -51,5 +59,3 @@ function getServerProjectInfo(hostname: string): typeof httpData.projects.result
     <OscDataGrid />
   </div>
 </template>
-
-<style scoped></style>
