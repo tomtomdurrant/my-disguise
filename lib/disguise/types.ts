@@ -23,7 +23,7 @@ export interface ConsolidatedSystemInfo {
   isServiceRunning?: boolean;
   isManagerRunning?: boolean;
   isNotchHostRunning?: boolean;
-  health?: {
+  health: {
     averageFPS: number;
     videoDroppedFrames: number;
     videoMissedFrames: number;
@@ -33,9 +33,11 @@ export interface ConsolidatedSystemInfo {
       category: string;
       severity: string;
     }>;
+  } | {
+    error: string;
   };
+  systemError?: string;
   status: {
-    code: number;
     message: string;
     details: Array<{ uid: string; message: string }>;
   };

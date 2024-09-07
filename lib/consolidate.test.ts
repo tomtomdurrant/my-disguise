@@ -236,6 +236,9 @@ describe("consolidateSystemInfo", () => {
     expect(result.understudies[0].health?.averageFPS).toBe(49.9990387);
 
     expect(result.isRunningSolo).toBe(false);
+    expect(result.director.status).toBeDefined();
+    expect(result.director.status.message).toBe("Not every system was populated.");
+    console.log(result.director.status);
     // expect(result.designers).toBeDefined();
   });
 
@@ -286,6 +289,7 @@ describe("consolidateSystemInfo", () => {
     expect(result.director.version).toBeUndefined();
     expect(result.director.ipAddress).toBeUndefined();
     expect(result.director.runningProject).toBeUndefined();
+    expect(result.director.systemError).toBe("something went wrong with the system info");
   });
 
   it("should handle missing health info correctly", () => {
@@ -300,6 +304,8 @@ describe("consolidateSystemInfo", () => {
 
     expect(result.director).toBeDefined();
     expect(result.director.hostname).toBe("DIS101");
-    expect(result.director.health).toBeUndefined();
+    expect(result.director.health).toBeDefined();
+    expect(result.director.health.error).toBeDefined();
+
   });
 });
