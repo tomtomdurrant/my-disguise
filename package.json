@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "test": "vitest"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.4",
@@ -36,11 +37,15 @@
   "devDependencies": {
     "@iconify-json/radix-icons": "^1.1.15",
     "@iconify/vue": "^4.1.2",
+    "@nuxt/test-utils": "^3.14.1",
     "@nuxtjs/color-mode": "^3.4.4",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@types/better-sqlite3": "^7.6.11",
+    "@vue/test-utils": "^2.4.6",
     "drizzle-kit": "^0.21.4",
+    "happy-dom": "^14.12.3",
     "prettier": "^3.3.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   }
 }

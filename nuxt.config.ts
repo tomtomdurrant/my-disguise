@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   },
   plugins: ["~/plugins/socket.client.ts"],
 
-  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@nuxtjs/color-mode", "shadcn-nuxt"],
+  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@nuxtjs/color-mode", "shadcn-nuxt", "@nuxt/test-utils/module"],
   colorMode: {
     classSuffix: "",
     preference: "system", // You can set this to 'dark' or 'light' if you prefer
