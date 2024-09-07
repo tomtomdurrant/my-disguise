@@ -1,23 +1,22 @@
 <script setup lang="ts">
-// import { httpData } from "~/lib/ws/socket";
+import { storeToRefs } from 'pinia';
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { settings } from "~/lib/settings";
-
 import { useDataStore } from "~/stores/dataStore";
 
 const dataStore = useDataStore();
-const { httpData } = dataStore;
+const { httpData } = storeToRefs(dataStore);
 
 function getAnnotationTrack(uid: string) {
-  return httpData.tracks?.result.find((x) => x.uid === uid);
+  return httpData.value.tracks?.result.find((x) => x.uid === uid);
 }
 
 function getMatchingTag(noteTime: number, index: number) {
-  if (httpData.annotations == null) {
+  if (httpData.value.annotations == null) {
     return null;
   }
-  return httpData.annotations[index].result.annotations.tags.find((tag) => tag.time === noteTime);
+  return httpData.value.annotations[index].result.annotations.tags.find((tag) => tag.time === noteTime);
 }
 
 function getVariant(noteTime: number, index: number) {

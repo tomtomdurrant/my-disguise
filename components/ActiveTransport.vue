@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { Badge } from "~/components/ui/badge";
 import { settings } from "~/lib/settings";
 import { useDataStore } from "~/stores/dataStore";
-import {useControl} from "~/composables/useControl";
+import { useControl } from "~/composables/useControl";
 
 const dataStore = useDataStore();
+const { httpData } = storeToRefs(dataStore);
 const control = useControl();
-const { httpData } = dataStore;
 </script>
 
 <template>

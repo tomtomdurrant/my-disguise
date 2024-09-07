@@ -1,50 +1,51 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import { settings } from "~/lib/settings";
 import { useDataStore } from "~/stores/dataStore";
 
-const {oscData, section} = useDataStore();
-
+const dataStore = useDataStore();
+const { oscData, section } = storeToRefs(dataStore);
 
 const data = computed(() => {
   return [
     {
       title: "Current Section",
-      value: section.current,
+      value: section.value.current,
       show: true
     },
     {
       title: "Next Section",
-      value: section.next,
+      value: section.value.next,
       show: true
     },
     {
       title: "Track Position",
-      value: oscData.osc_trackname,
+      value: oscData.value.osc_trackname,
       show: true
     },
     {
       title: "Timecode Position",
-      value: oscData.osc_timecodeposition,
+      value: oscData.value.osc_timecodeposition,
       show: true
     },
     {
       title: "Track Name",
-      value: oscData.osc_trackname,
+      value: oscData.value.osc_trackname,
       show: true
     },
     {
       title: "Current Section Name",
-      value: oscData.osc_currentsectionname,
+      value: oscData.value.osc_currentsectionname,
       show: true
     },
     {
       title: "Heartbeat",
-      value: oscData.osc_heartbeat,
+      value: oscData.value.osc_heartbeat,
       show: settings.statsForNerds,
     },
     {
       title: "Full section hint",
-      value: oscData.osc_sectionhint,
+      value: oscData.value.osc_sectionhint,
       show: settings.statsForNerds,
     },
   ];

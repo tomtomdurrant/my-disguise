@@ -50,16 +50,23 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   socket.on("health", (health) => {
-    dataStore.httpData.health = health;
-    dataStore.inSession = true;
+    dataStore.$patch((state) => {
+      state.httpData.health = health;
+      state.inSession = true;
+    });
   });
 
   socket.on("tracks", (tracks) => {
-    dataStore.httpData.tracks = tracks;
-    dataStore.inSession = true;
+    dataStore.$patch((state) => {
+      state.httpData.tracks = tracks;
+      state.inSession = true;
+    });
   });
+
   socket.on("projects", (projects) => {
-    dataStore.httpData.projects = projects;
+    dataStore.$patch((state) => {
+      state.httpData.projects = projects;
+    });
   });
 
   // socket.on("connect_error", (error) => {

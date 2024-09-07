@@ -1,99 +1,98 @@
 import { z } from "zod";
 import { detectSystemsResponseSchema, statusGetSessionResponseSchema, statusListHealthResponseSchema } from "./schema";
+import type { StatusGetSessionResponse, DetectSystemsResponse, StatusListHealthResponse, ConsolidatedInfo, ConsolidatedSystemInfo } from "./types";
+import { detailsArraySchema } from "./utils";
 
-type StatusGetSessionResponse = z.infer<typeof statusGetSessionResponseSchema>;
-type DetectSystemsResponse = z.infer<typeof detectSystemsResponseSchema>;
-type StatusListHealthResponse = z.infer<typeof statusListHealthResponseSchema>;
+// type StatusGetSessionResponse = z.infer<typeof statusGetSessionResponseSchema>;
+// type DetectSystemsResponse = z.infer<typeof detectSystemsResponseSchema>;
+// type StatusListHealthResponse = z.infer<typeof statusListHealthResponseSchema>;
 
-export interface ConsolidatedSystemInfo {
-  uid: string;
-  name: string;
-  hostname: string;
-  type: string;
-  role: "director" | "actor" | "understudy";
-  version?: {
-    major: number;
-    minor: number;
-    hotfix: number;
-    revision: number;
-  };
-  ipAddress?: string;
-  runningProject?: string;
-  isDesignerRunning?: boolean;
-  isServiceRunning?: boolean;
-  isManagerRunning?: boolean;
-  isNotchHostRunning?: boolean;
-  health?: {
-    averageFPS: number;
-    videoDroppedFrames: number;
-    videoMissedFrames: number;
-    states: Array<{
-      name: string;
-      detail: string;
-      category: string;
-      severity: string;
-    }>;
-  };
-  status: {
-    code: number;
-    message: string;
-    details: Array<{ uid: string; message: string }>;
-  };
-}
+// export interface ConsolidatedSystemInfo {
+//   uid: string;
+//   name: string;
+//   hostname: string;
+//   type: string;
+//   role: "director" | "actor" | "understudy";
+//   version?: {
+//     major: number;
+//     minor: number;
+//     hotfix: number;
+//     revision: number;
+//   };
+//   ipAddress?: string;
+//   runningProject?: string;
+//   isDesignerRunning?: boolean;
+//   isServiceRunning?: boolean;
+//   isManagerRunning?: boolean;
+//   isNotchHostRunning?: boolean;
+//   health?: {
+//     averageFPS: number;
+//     videoDroppedFrames: number;
+//     videoMissedFrames: number;
+//     states: Array<{
+//       name: string;
+//       detail: string;
+//       category: string;
+//       severity: string;
+//     }>;
+//   };
+//   status: {
+//     code: number;
+//     message: string;
+//     details: Array<{ uid: string; message: string }>;
+//   };
+// }
 
-interface ConsolidatedInfo {
-  director: ConsolidatedSystemInfo & { isDirectorDedicated: boolean };
-  actors: ConsolidatedSystemInfo[];
-  understudies: ConsolidatedSystemInfo[];
-  isRunningSolo: boolean;
-}
+// interface ConsolidatedInfo {
+//   director: ConsolidatedSystemInfo & { isDirectorDedicated: boolean };
+//   actors: ConsolidatedSystemInfo[];
+//   understudies: ConsolidatedSystemInfo[];
+//   isRunningSolo: boolean;
+// }
 
-const detailSchema = z
-  .object({
-    uid: z.string().optional(),
-    "@type": z.string().optional(),
-    message: z.string(),
-  })
-  .transform(({ uid, "@type": type, message }) => ({
-    uid: uid || type || "unknown",
-    message,
-  }));
+// const detailSchema = z
+//   .object({
+//     uid: z.string().optional(),
+//     "@type": z.string().optional(),
+//     message: z.string(),
+//   })
+//   .transform(({ uid, "@type": type, message }) => ({
+//     uid: uid || type || "unknown",
+//     message,
+//   }));
 
-const detailsArraySchema = z
-  .array(
-    z.union([z.string(), detailSchema, z.unknown().transform((d) => ({ uid: "unknown", message: JSON.stringify(d) }))])
-  )
-  .transform((details) =>
-    details.map((d) => {
-      if (typeof d === "string") return { uid: "unknown", message: d };
-      return d;
-    })
-  );
+// const detailsArraySchema = z
+//   .array(
+//     z.union([z.string(), detailSchema, z.unknown().transform((d) => ({ uid: "unknown", message: JSON.stringify(d) }))])
+//   )
+//   .transform((details) =>
+//     details.map((d) => {
+//       if (typeof d === "string") return { uid: "unknown", message: d };
+//       return d;
+//     })
+//   );
 
-const extractDetails = (details: any[]): Array<{ uid: string; message: string }> => {
-  return details.map((d) => {
-    if (typeof d === "string") {
-      return { uid: "unknown", message: d };
-    } else if (d && typeof d === "object") {
-      return {
-        uid: d.uid || d["@type"] || "unknown",
-        message: d.message || JSON.stringify(d),
-      };
-    }
-    return { uid: "unknown", message: String(d) };
-  });
-};
+// const extractDetails = (details: any[]): Array<{ uid: string; message: string }> => {
+//   return details.map((d) => {
+//     if (typeof d === "string") {
+//       return { uid: "unknown", message: d };
+//     } else if (d && typeof d === "object") {
+//       return {
+//         uid: d.uid || d["@type"] || "unknown",
+//         message: d.message || JSON.stringify(d),
+//       };
+//     }
+//     return { uid: "unknown", message: String(d) };
+//   });
+// };
 
 export function consolidateSystemInfo(
-  sessionResponse: StatusGetSessionResponse | null,
-  systemsResponse: DetectSystemsResponse | null,
-  healthResponse: StatusListHealthResponse | null
-): ConsolidatedInfo | null {
-  console.log("running consolidate");
-  console.log({ sessionResponse, systemsResponse, healthResponse });
-  if (!sessionResponse || !systemsResponse || !healthResponse) {
-    return null;
-  }
+  sessionResponse: StatusGetSessionResponse,
+  systemsResponse: DetectSystemsResponse,
+  healthResponse: StatusListHealthResponse
+): ConsolidatedInfo {
+  console.log("consolidateSystemInfo", sessionResponse, systemsResponse, healthResponse);
+  
   const systemsMap = new Map(systemsResponse.result.map((s) => [s.hostname.toLowerCase(), s]));
   const healthMap = new Map(healthResponse.result.map((h) => [h.machine.hostname.toLowerCase(), h]));
   // Helper function to find the solo system
