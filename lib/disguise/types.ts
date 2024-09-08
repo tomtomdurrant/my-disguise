@@ -36,6 +36,7 @@ export interface ConsolidatedSystemInfo {
   } | {
     error: string;
   };
+  projects: Array<string>;
   systemError?: string;
   status: {
     message: string;

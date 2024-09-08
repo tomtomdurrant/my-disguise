@@ -74,10 +74,10 @@ export const useDataStore = defineStore("data", () => {
   const nextSection = ref<string | null>(null);
 
   const consolidated = computed(() => {
-    if (!httpData.session || !httpData.systems || !httpData.health) {
+    if (!httpData.session || !httpData.systems || !httpData.health ) {
       return null;
     }
-    return consolidateSystemInfo(httpData.session, httpData.systems, httpData.health);
+    return consolidateSystemInfo(httpData.session, httpData.systems, httpData.health, httpData.projects);
   });
 
   return { 

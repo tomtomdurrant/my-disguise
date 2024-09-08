@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import type { ConsolidatedSystemInfo } from "~/lib/disguise/consolidate";
 import { RefreshCwIcon, ChevronsUpDown, PowerOff, Power } from "lucide-vue-next";
 import { settings } from "~/lib/settings";
 import type { ListProjectsResponse } from "~/lib/disguise/schema";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "~/components/ui/collapsible";
+import type { ConsolidatedSystemInfo } from "~/lib/disguise/types";
 
-const { server, projectInfo } = defineProps<{
+const { projectInfo, server } = defineProps<{
   server: ConsolidatedSystemInfo;
   projectInfo: ListProjectsResponse["result"][number] | undefined;
 }>();
@@ -48,7 +48,7 @@ const serverInfo = computed(() => {
 </script>
 
 <template>
-  <Card class="col-span-2">
+  <Card v-if="server != undefined" class="col-span-2">
     <ClientOnly>
       <CardHeader>
         <div class="flex justify-between items-center">

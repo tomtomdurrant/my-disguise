@@ -4,18 +4,18 @@ import { settings } from "~/lib/settings";
 import { useDataStore } from "~/stores/dataStore";
 
 const dataStore = useDataStore();
-const { oscData, section } = storeToRefs(dataStore);
+const { oscData, currentSection, nextSection } = storeToRefs(dataStore);
 
 const data = computed(() => {
   return [
     {
       title: "Current Section",
-      value: section.value.current,
+      value: currentSection.value,
       show: true
     },
     {
       title: "Next Section",
-      value: section.value.next,
+      value: nextSection.value,
       show: true
     },
     {

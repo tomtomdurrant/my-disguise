@@ -25,7 +25,6 @@ function getServerProjectInfo(hostname: string) {
 </script>
 
 <template>
-  <pre>{{ JSON.stringify(consolidated, null, 2)}}</pre>
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
     <template v-if="!inSession">
       <Projects />
