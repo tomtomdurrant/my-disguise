@@ -88,14 +88,11 @@ export function consolidateSystemInfo(
             error: "something went wrong with the health info",
           },
         };
-    const projects =
-      projectsResponse?.result.find((p) => p.hostname.toLowerCase() === system.hostname.toLowerCase())?.projects.map((x) => x.path) ?? [];
     return {
       ...system,
       role,
       ...sys,
       ...healthy,
-      projects,
       status: {
         message: [sessionResponse.status.message, systemsResponse.status.message, healthResponse.status.message]
           .filter(Boolean)

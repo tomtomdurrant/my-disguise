@@ -1,18 +1,17 @@
 <script setup lang="ts">
-// import { socketState } from "~/lib/ws/socket";
 import { useSocketStore } from "~/stores/socketStore";
 
 const socketStore = useSocketStore();
 </script>
 
 <template>
-  <div class="flex flex-col items-start md:items-end text-xs">
+  <div class="flex flex-col items-start  text-xs ">
     <h2 class="font-bold">Connection status</h2>
-    <div class="flex items-center space-x-2">
-      <div>
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center">
         <span>Connected:</span>
         <span
-          class="font-bold"
+          class="font-bold ml-1"
           :class="{
             'text-green-500': socketStore.connected,
             'text-red-500': !socketStore.connected,
@@ -22,12 +21,12 @@ const socketStore = useSocketStore();
         </span>
       </div>
       <div>
-        <span>Transport: </span>
-        <span class="font-bold">{{ socketStore.transport }}</span>
+        <span>Transport:</span>
+        <span class="font-bold ml-1">{{ socketStore.transport }}</span>
       </div>
       <div>
-        <span>Last Message Time </span>
-        <span class="font-bold">{{ socketStore.lastMessageTime?.toISOString() }}</span>
+        <span>Last Message Time:</span>
+        <span class="font-bold ml-1">{{ socketStore.lastMessageTime?.toISOString() }}</span>
       </div>
     </div>
   </div>

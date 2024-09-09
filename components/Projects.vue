@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { h } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -9,10 +8,8 @@ import { Button } from "@/components/ui/button";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/toast";
-import { useDataStore } from "~/stores/dataStore";
+import { httpData } from "~/stores/dataStore";
 
-const dataStore = useDataStore();
-const { httpData } = storeToRefs(dataStore);
 
 function convertPath(path: string) {
   return path.replace(/\\/g, "/").split("/d3 projects/")[1];
@@ -31,10 +28,10 @@ const { handleSubmit } = useForm({
 });
 
 const projects = computed(() => {
-  if (!httpData.value.projects || httpData.value.projects.result[0].projects.length === 0) {
+  if (!httpData.projects || httpData.projects.result[0].projects.length === 0) {
     return null;
   }
-  return httpData.value.projects.result[0].projects.map((project) => convertPath(project.path));
+  return httpData.projects.result[0].projects.map((project) => convertPath(project.path));
 });
 
 const onSubmit = handleSubmit(async (values) => {

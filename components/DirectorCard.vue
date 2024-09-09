@@ -2,10 +2,10 @@
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { RefreshCwIcon, ChevronsUpDown, PowerOff, Power } from "lucide-vue-next";
-import { settings } from "~/lib/settings";
 import type { ListProjectsResponse } from "~/lib/disguise/schema";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "~/components/ui/collapsible";
 import type { ConsolidatedSystemInfo } from "~/lib/disguise/types";
+import Stats from "~/components/Stats.vue";
 
 const { projectInfo, server } = defineProps<{
   server: ConsolidatedSystemInfo;
@@ -48,17 +48,15 @@ const serverInfo = computed(() => {
 </script>
 
 <template>
-  <Card v-if="server != undefined" class="col-span-2">
+  <Card class="col-span-2">
     <ClientOnly>
       <CardHeader>
         <div class="flex justify-between items-center">
           <CardTitle class="flex items-end space-x-2">
-            <span>{{ server.hostname }} - Director</span>
-            <Badge v-if="settings.statsForNerds" class="font-mono"
-              >{{ server.version?.major }}.{{ server.version?.minor }}.{{ server.version?.hotfix }}.{{
-                server.version?.revision
-              }}
-            </Badge>
+            <div>
+              {{ server.hostname }} - Director
+              <Stats :uid="server.uid" :version="server.version" />
+            </div>
           </CardTitle>
           <Badge class="" variant="outline">{{ server.type }}</Badge>
         </div>

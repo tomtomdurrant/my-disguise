@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useDataStore } from "~/stores/dataStore";
+import { consolidated, httpData } from "~/stores/dataStore";
 
-const dataStore = useDataStore();
-const { httpData, inSession, consolidated } = storeToRefs(dataStore);
+// watch(projects, (newVal) => {
+//   if (newVal) {
+//     console.log("Projects updated");
+//   }
+// });
 
 const directorProjects = computed(() => {
-  if (!httpData.value.projects?.result || !consolidated.value?.director.hostname) {
+  if (!httpData.projects || !consolidated.value?.director.hostname) {
+    console.log("No projects or director hostname");
     return undefined;
   }
-  return httpData.value.projects.result.find(
+  return httpData.projects.result.find(
     (machine) => machine.hostname.toUpperCase() === consolidated.value?.director.hostname.toUpperCase()
   );
 });
 
 function getServerProjectInfo(hostname: string) {
-  if (!httpData.value.projects?.result || !hostname) {
+  if (!httpData.projects?.result || !hostname) {
     return undefined;
   }
-  return httpData.value.projects.result.find(
-    (machine) => machine.hostname.toUpperCase() === hostname.toUpperCase()
-  );
+  return httpData.projects.result.find((machine) => machine.hostname.toUpperCase() === hostname.toUpperCase());
 }
 </script>
 

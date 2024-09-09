@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { detectSystemsResponseSchema, statusGetSessionResponseSchema, statusListHealthResponseSchema } from "./schema";
+import { detectSystemsResponseSchema, statusD3VersionInfoSchema, statusGetSessionResponseSchema, statusListHealthResponseSchema } from "./schema";
 
 export type StatusGetSessionResponse = z.infer<typeof statusGetSessionResponseSchema>;
 export type DetectSystemsResponse = z.infer<typeof detectSystemsResponseSchema>;
@@ -24,19 +24,17 @@ export interface ConsolidatedSystemInfo {
   isManagerRunning?: boolean;
   isNotchHostRunning?: boolean;
   health: {
-    averageFPS: number;
-    videoDroppedFrames: number;
-    videoMissedFrames: number;
-    states: Array<{
+    averageFPS?: number;
+    videoDroppedFrames?: number;
+    videoMissedFrames?: number;
+    states?: Array<{
       name: string;
       detail: string;
       category: string;
       severity: string;
     }>;
-  } | {
-    error: string;
+    error?: string;
   };
-  projects: Array<string>;
   systemError?: string;
   status: {
     message: string;
@@ -50,3 +48,6 @@ export interface ConsolidatedInfo {
   understudies: ConsolidatedSystemInfo[];
   isRunningSolo: boolean;
 }
+
+
+export type D3VersionInfo = z.infer<typeof statusD3VersionInfoSchema>;

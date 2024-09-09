@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { Badge } from "~/components/ui/badge";
 import { settings } from "~/lib/settings";
-import { useDataStore } from "~/stores/dataStore";
 import { useControl } from "~/composables/useControl";
+import { httpData } from "~/stores/dataStore";
 
-const dataStore = useDataStore();
-const { httpData } = storeToRefs(dataStore);
 const control = useControl();
 </script>
 
@@ -18,11 +15,11 @@ const control = useControl();
       </CardHeader>
       <CardContent>
         <div v-if="httpData.active?.result?.length && httpData.active.result[0]" class="space-y-2">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col items-start justify-between">
             <p class="text-lg font-semibold">{{ httpData.active.result[0].name }}</p>
-            <span v-if="settings.statsForNerds" class="font-mono text-sm"
-              >uid: {{ httpData.active.result[0].uid }}</span
-            >
+            <div v-if="settings.statsForNerds">
+              <UidDisplay label="UID" :uid="httpData.active.result[0].uid" />
+            </div>
           </div>
           <p class="text-sm font-medium text-muted-foreground">Current Active Transport</p>
           <div class="flex items-center space-x-2">
