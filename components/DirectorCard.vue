@@ -7,41 +7,42 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "~/component
 import type { ConsolidatedSystemInfo } from "~/lib/disguise/types";
 import Stats from "~/components/Stats.vue";
 
-const { projectInfo, server } = defineProps<{
+const props = defineProps<{
   server: ConsolidatedSystemInfo;
-  projectInfo: ListProjectsResponse["result"][number] | undefined;
+  projectInfo?: ListProjectsResponse["result"][number];
 }>();
+
 const isOpen = ref(false);
 const serverInfo = computed(() => {
   return [
     {
       title: "IP Address",
-      value: server.ipAddress,
+      value: props.server.ipAddress,
     },
     {
       title: "Machine Name",
-      value: server.name,
+      value: props.server.name,
     },
     {
       title: "Status",
-      value: server.isServiceRunning ? "Online" : "Offline",
+      value: props.server.isServiceRunning ? "Online" : "Offline",
     },
     {
       title: "Average FPS",
-      value: server.health?.averageFPS,
+      value: props.server.health?.averageFPS,
     },
     {
       title: "FPS Dropped",
-      value: server.health?.videoDroppedFrames,
+      value: props.server.health?.videoDroppedFrames,
     },
     {
       title: "Currently Active Project",
-      value: server.runningProject,
+      value: props.server.runningProject,
       error: "Error returning project",
     },
     {
       title: "Last Project",
-      value: projectInfo?.lastProject,
+      value: props.projectInfo?.lastProject,
     },
   ];
 });
@@ -54,22 +55,22 @@ const serverInfo = computed(() => {
         <div class="flex justify-between items-center">
           <CardTitle class="flex items-end space-x-2">
             <div>
-              {{ server.hostname }} - Director
-              <Stats :uid="server.uid" :version="server.version" />
+              {{ props.server.hostname }} - Director
+              <Stats v-if="props.server.version" :uid="props.server.uid" :version="props.server.version" />
             </div>
           </CardTitle>
-          <Badge class="" variant="outline">{{ server.type }}</Badge>
+          <Badge class="" variant="outline">{{ props.server.type }}</Badge>
         </div>
       </CardHeader>
-      <CardContent class="space-y-4">
-        <div class="grid grid-cols-2 gap-2 text-sm">
-          <div v-for="info in serverInfo">
+      <CardContent class="space-y-6">
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div v-for="info in serverInfo" class="space-y-1">
             <p class="font-medium text-muted-foreground">{{ info.title }}</p>
             <p>{{ info.value }}</p>
-            <p v-if="info.error" class="text-red-500">{{ info.error }}</p>
+            <p v-if="info.error" class="text-destructive">{{ info.error }}</p>
           </div>
         </div>
-        <Collapsible v-model:open="isOpen" class="space-y-2 border-b">
+        <Collapsible v-model:open="isOpen" class="space-y-2 border-t pt-4">
           <div class="flex items-center justify-between">
             <h4 class="text-sm font-semibold">All Projects</h4>
             <CollapsibleTrigger as-child>
@@ -85,9 +86,9 @@ const serverInfo = computed(() => {
             </div>
           </CollapsibleContent>
         </Collapsible>
-        <div v-if="server.status.details.length > 0" class="">
-          <p>Errors:</p>
-          <p v-for="details in server.status.details" class="text-sm">
+        <div v-if="props.server.status.details.length > 0" class="space-y-2">
+          <p class="font-medium">Errors:</p>
+          <p v-for="details in props.server.status.details" class="text-sm text-destructive">
             {{ details.message }}
           </p>
         </div>

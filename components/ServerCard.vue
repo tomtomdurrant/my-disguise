@@ -6,7 +6,7 @@ import { Button } from "~/components/ui/button";
 import type { ConsolidatedSystemInfo } from "~/lib/disguise/types";
 import Stats from "~/components/Stats.vue";
 
-const { server, projectInfo } = defineProps<{
+const props = defineProps<{
   server: ConsolidatedSystemInfo;
   projectInfo?: ListProjectsResponse["result"][number];
 }>();
@@ -18,9 +18,9 @@ const isOpen = ref(false);
     <CardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-xl font-semibold">{{ server.hostname }}</h2>
-          <p>{{ server.type }}</p>
-          <Stats :uid="server.uid" :version="server.version" />
+          <h2 class="text-xl font-semibold">{{ props.server.hostname }}</h2>
+          <p>{{ props.server.type }}</p>
+          <Stats :uid="props.server.uid" :version="props.server.version" />
         </div>
         <div class="flex items-center gap-2">
           <p class="rounded-full bg-green-500 px-2 py-1 text-xs font-medium text-green-50">Online</p>
@@ -32,47 +32,47 @@ const isOpen = ref(false);
       </div>
     </CardHeader>
     <CardContent class="grid gap-2">
-      <template v-if="server != null">
+      <template v-if="props.server != null">
         <div class="">
           <p class="text-muted-foreground">IP Address:</p>
-          <p>{{ server.ipAddress }}</p>
+          <p>{{ props.server.ipAddress }}</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Machine Name:</p>
-          <p>{{ server.name }}</p>
+          <p>{{ props.server.name }}</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Status:</p>
           <!--          TODO bit ugly-->
-          <p v-if="server.health?.states[0].detail === 'Connected'">
-            {{ server.health.states[0].detail }}
-            <template v-if="server.health.states[1].detail === 'OK'"> - Synced</template>
+          <p v-if="props.server.health?.states?.[0].detail === 'Connected'">
+            {{ props.server.health?.states?.[0].detail }}
+            <template v-if="props.server.health?.states?.[1].detail === 'OK'"> - Synced</template>
             <template v-else> - Not Synced</template>
           </p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Average FPS:</p>
-          <p>{{ server.health?.averageFPS.toFixed(2) }}</p>
+          <p>{{ props.server.health?.averageFPS?.toFixed(2) }}</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Frames Dropped:</p>
-          <p>{{ server.health?.videoDroppedFrames }}</p>
+          <p>{{ props.server.health?.videoDroppedFrames }}</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Frames Missed</p>
-          <p>{{ server.health?.videoMissedFrames }}</p>
+          <p>{{ props.server.health?.videoMissedFrames }}</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Currently Active Project:</p>
-          <p v-if="server.runningProject">
-            {{ server.runningProject }}
+          <p v-if="props.server.runningProject">
+            {{ props.server.runningProject }}
           </p>
           <p class="text-red-500 underline underline-offset-2" v-else>Error returning project</p>
         </div>
         <div class="">
           <p class="text-muted-foreground">Last Project:</p>
-          <p v-if="projectInfo" class="">
-            {{ projectInfo.lastProject }}
+          <p v-if="props.projectInfo" class="">
+            {{ props.projectInfo?.lastProject }}
           </p>
           <p v-else class="text-red-300 underline underline-offset-2">Error returning last project</p>
         </div>
@@ -88,7 +88,7 @@ const isOpen = ref(false);
               </CollapsibleTrigger>
             </div>
             <CollapsibleContent class="space-y-2">
-              <div v-for="project in projectInfo?.projects" class="rounded-md border px-4 py-3 font-mono text-sm">
+              <div v-for="project in props.projectInfo?.projects" class="rounded-md border px-4 py-3 font-mono text-sm">
                 {{ project.path }}
               </div>
             </CollapsibleContent>
@@ -97,7 +97,7 @@ const isOpen = ref(false);
 
         <div class="">
           <p class="text-muted-foreground">Status:</p>
-          <div v-if="server.health?.videoDroppedFrames && server.health?.videoDroppedFrames > 5">
+          <div v-if="props.server.health?.videoDroppedFrames && props.server.health?.videoDroppedFrames > 5">
             <p class="">
               <span class="rounded-3xl bg-red-600 px-2 py-1 text-sm text-red-100">Fluctuating</span>
             </p>

@@ -33,6 +33,12 @@ function getServerProjectInfo(hostname: string) {
     <template v-else-if="inSession && consolidated?.director">
       <DirectorCard :server="consolidated.director" :project-info="directorProjects" />
       <ServerCard
+        v-for="server in consolidated.actors"
+        :key="server.uid"
+        :server="server"
+        :project-info="getServerProjectInfo(server.hostname)"
+      />
+      <ServerCard
         v-for="server in consolidated.understudies"
         :key="server.uid"
         :server="server"

@@ -1,0 +1,19 @@
+version: '3'
+services:
+  nuxt-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  server:
+    build:
+      context: .
+      dockerfile: ./wsServer/Dockerfile.server
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
